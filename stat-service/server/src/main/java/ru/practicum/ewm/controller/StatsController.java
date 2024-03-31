@@ -35,7 +35,7 @@ public class StatsController {
                                    @RequestParam(defaultValue = "") List<String> uris,
                                    @RequestParam(defaultValue = "false") boolean unique) {
         log.info("Get запрос на получение статистики");
-        if(end.isBefore(start)) {
+        if (end.isBefore(start)) {
             log.warn("Неверно указаны даты: start {} позже end {}", start, end);
             throw new InvalidParameterException("Неверно указаны даты: start " + start + " позже end " + end);
         }

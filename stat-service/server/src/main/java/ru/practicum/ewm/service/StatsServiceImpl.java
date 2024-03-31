@@ -21,7 +21,7 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public List<StatsDto> getStatsList(StatsRequestDto request) {
-        if(request.isUnique()) {
+        if (request.isUnique()) {
             return repository.getUniqueStats(request);
         }
         return repository.getStats(request);
