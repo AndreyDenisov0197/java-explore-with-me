@@ -29,14 +29,14 @@ public class StatsClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> saveHit(HttpServletRequest request) {
-        final HitDto hit = HitDto.builder()
+    public ResponseEntity<Object> saveHit(HitDto request) {
+        /*final HitDto hit = HitDto.builder()
                 .app(applicationName)
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())
                 .timestamp(Timestamp.from(Instant.now()).toLocalDateTime())
-                .build();
-        return post(hit);
+                .build();*/
+        return post(request);
     }
 
     public ResponseEntity<Object> getHit(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {

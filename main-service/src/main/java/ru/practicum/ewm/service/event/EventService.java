@@ -8,21 +8,22 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface EventService {
+
     List<EventFullDto> getAllEventFromAdmin(SearchEventParamsAdmin searchEventParamsAdmin);
 
     EventFullDto updateEventFromAdmin(Long eventId, UpdateEventAdminRequest inputUpdate);
 
-    List<EventShortDto> getEventByUserId(Long userId, Integer from, Integer size);
+    List<EventShortDto> getEventsByUserId(Long userId, Integer from, Integer size);
+
+    EventFullDto addNewEvent(Long userId, NewEventDto input);
+
+    EventFullDto getEventByUserIdAndEventId(Long userId, Long eventId);
+
+    EventFullDto updateEventByUserIdAndEventId(Long userId, Long eventId, UpdateEventUserRequest inputUpdate);
 
     List<ParticipationRequestDto> getAllParticipationRequestsFromEventByOwner(Long userId, Long eventId);
 
     EventRequestStatusUpdateResult updateStatusRequest(Long userId, Long eventId, EventRequestStatusUpdateRequest inputUpdate);
-
-    EventFullDto getFullEventByOwnerAndEventId(Long userId, Long eventId);
-
-    EventFullDto updateEventByUserIdAndEventId(Long userId, Long eventId, UpdateEventUserRequest inputUpdate);
-
-    EventFullDto addNewEvent(Long userId, NewEventDto newEventDto);
 
     List<EventShortDto> getAllEventFromPublic(SearchEventParams searchEventParams, HttpServletRequest request);
 

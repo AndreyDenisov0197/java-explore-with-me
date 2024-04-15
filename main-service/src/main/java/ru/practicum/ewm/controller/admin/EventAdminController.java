@@ -13,9 +13,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import java.util.List;
 
-@RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/admin/events")
+@RequiredArgsConstructor
 @Validated
 @Slf4j
 public class EventAdminController {
@@ -23,15 +23,14 @@ public class EventAdminController {
 
     @GetMapping
     public List<EventFullDto> searchEvents(@Valid SearchEventParamsAdmin searchEventParamsAdmin) {
-        log.info("GET запрос на получение списка событий: {}", searchEventParamsAdmin);
+        log.info("GET запрос на получение списка событий");
         return eventService.getAllEventFromAdmin(searchEventParamsAdmin);
     }
 
     @PatchMapping("/{eventId}")
-    public EventFullDto updateEventAdmin(@PathVariable(value = "eventId") @Min(1) Long eventId,
-                                         @RequestBody @Valid UpdateEventAdminRequest inputUpdate) {
-        log.info("PATCH запрос на обновление списка событий: {}, c ID = {}", inputUpdate, eventId);
+    public EventFullDto updateEventByAdmin(@PathVariable(value = "eventId") @Min(1) Long eventId,
+                                           @RequestBody @Valid UpdateEventAdminRequest inputUpdate) {
+        log.info("PATCH запрос на обновление списка событий");
         return eventService.updateEventFromAdmin(eventId, inputUpdate);
     }
-
 }

@@ -18,13 +18,13 @@ import javax.validation.constraints.Min;
 @RequestMapping(path = "/admin/categories")
 @RequiredArgsConstructor
 public class CategoryAdminController {
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CategoryDto createCategory(@RequestBody @Valid NewCategoryDto categoryDto) {
-        log.info("POST запрос на создание новой категории: {}", categoryDto);
-        return categoryService.addNewCategory(categoryDto);
+    public CategoryDto createCategory(@RequestBody @Valid NewCategoryDto newCategoryDto) {
+        log.info("POST запрос на создание новой категории: {}", newCategoryDto);
+        return categoryService.addNewCategory(newCategoryDto);
     }
 
     @DeleteMapping("/{catId}")

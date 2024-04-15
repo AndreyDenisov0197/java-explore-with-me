@@ -7,11 +7,11 @@ import ru.practicum.ewm.dto.compilation.UpdateCompilationDto;
 import java.util.List;
 
 public interface CompilationsService {
-    CompilationDto addCompilation(NewCompilationDto newCompilationDto);
+    CompilationDto addCompilation(NewCompilationDto compilationDto);
+
+    CompilationDto updateCompilation(Long compId, UpdateCompilationDto update);
 
     void deleteCompilation(Long compId);
-
-    CompilationDto updateCompilation(Long compId, UpdateCompilationDto updateCompilationDto);
 
     List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size);
 

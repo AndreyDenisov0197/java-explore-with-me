@@ -6,9 +6,9 @@ import ru.practicum.ewm.dto.user.UserDto;
 import java.util.List;
 
 public interface UserService {
-    List<UserDto> getListUsers(List<Long> ids, Integer from, Integer size);
-
-    UserDto addNewUser(NewUserRequest user);
+    UserDto addNewUser(NewUserRequest newUserRequest);
 
     void deleteUser(Long userId);
+
+    List<UserDto> getListUsers(List<Long> ids, Integer from, Integer size);
 }

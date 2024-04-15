@@ -17,45 +17,43 @@ import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/users/{userId}/events")
-@RequiredArgsConstructor
 @Slf4j
+@RequiredArgsConstructor
 @Validated
+@RequestMapping(path = "/users/{userId}/events")
 public class EventPrivateController {
     private final EventService eventService;
 
     @GetMapping
-    public List<EventShortDto> getAllEventByUserId(@PathVariable(value = "userId") @Min(1) Long userId,
-                                                   @RequestParam(value = "from", defaultValue = "0")
-                                                   @PositiveOrZero Integer from,
-                                                   @RequestParam(value = "size", defaultValue = "10")
-                                                       @Positive Integer size) {
-        log.info("GET запрос на получение всех событий пользователя с ID={}", userId);
-        return eventService.getEventByUserId(userId, from, size);
+    public List<EventShortDto> getAllEventsByUserId(@PathVariable(value = "userId") @Min(1) Long userId,
+                                                    @RequestParam(value = "from", defaultValue = "0")
+                                                    @PositiveOrZero Integer from,
+                                                    @RequestParam(value = "size", defaultValue = "10")
+                                                    @Positive Integer size) {
+        log.info("GET запрос на получения событий пользователя с id= {}", userId);
+        return eventService.getEventsByUserId(userId, from, size);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto addEvent(@PathVariable(value = "userId") @Min(1) Long userId,
-                                 @RequestBody @Valid NewEventDto newEventDto) {
-        log.info("POST запрос на добавление события: {}, id={}", newEventDto, userId);
-        return eventService.addNewEvent(userId, newEventDto);
+                                 @RequestBody @Valid NewEventDto input) {
+        log.info("POST запрос на создание события от пользователя с id= {}", userId);
+        return eventService.addNewEvent(userId, input);
     }
 
     @GetMapping("/{eventId}")
     public EventFullDto getFullEventByOwner(@PathVariable(value = "userId") @Min(1) Long userId,
                                             @PathVariable(value = "eventId") @Min(1) Long eventId) {
-        log.info("GET запрос на получение полной информации о событии {}, добавлен пользователем id={}",
-                eventId, userId);
-        return eventService.getFullEventByOwnerAndEventId(userId, eventId);
+        log.info("GET запрос на получения полной информации о событии для пользователя с id= {}", userId);
+        return eventService.getEventByUserIdAndEventId(userId, eventId);
     }
 
     @PatchMapping("/{eventId}")
-    public EventFullDto updateEventByOwner(@PathVariable(value = "userId") @Min(1) Long userId,
-                                           @PathVariable(value = "eventId") @Min(1) Long eventId,
+    public EventFullDto updateEventByOwner(@PathVariable(value = "userId") @Min(0) Long userId,
+                                           @PathVariable(value = "eventId") @Min(0) Long eventId,
                                            @RequestBody @Valid UpdateEventUserRequest inputUpdate) {
-        log.info("PATCH запрос на обновление события {}, от пользователя с id= {}, обновить на-{}",
-                eventId, userId, inputUpdate);
+        log.info("PATCH запрос на обновление события от пользователя с id= {}", userId);
         return eventService.updateEventByUserIdAndEventId(userId, eventId, inputUpdate);
     }
 
