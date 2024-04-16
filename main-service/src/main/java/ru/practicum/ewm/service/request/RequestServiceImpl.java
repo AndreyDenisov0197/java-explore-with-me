@@ -2,6 +2,7 @@ package ru.practicum.ewm.service.request;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.request.ParticipationRequestDto;
 import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.exception.NotFoundException;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Transactional(readOnly = true)
 @Service
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
@@ -27,6 +29,7 @@ public class RequestServiceImpl implements RequestService {
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
+    @Transactional
     @Override
     public ParticipationRequestDto addNewRequest(Long userId, Long eventId) {
         User user = checkUser(userId);
@@ -55,6 +58,7 @@ public class RequestServiceImpl implements RequestService {
         return RequestMapper.toParticipationRequestDto(request);
     }
 
+    @Transactional
     @Override
     public List<ParticipationRequestDto> getRequestsByUserId(Long userId) {
         checkUser(userId);
@@ -62,6 +66,7 @@ public class RequestServiceImpl implements RequestService {
         return result.stream().map(RequestMapper::toParticipationRequestDto).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
         checkUser(userId);
