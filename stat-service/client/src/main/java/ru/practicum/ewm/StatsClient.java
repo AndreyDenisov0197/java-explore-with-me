@@ -6,9 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 
-import javax.servlet.http.HttpServletRequest;
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -29,14 +26,14 @@ public class StatsClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> saveHit(HttpServletRequest request) {
-        final HitDto hit = HitDto.builder()
+    public ResponseEntity<Object> saveHit(HitDto request) {
+        /*final HitDto hit = HitDto.builder()
                 .app(applicationName)
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())
                 .timestamp(Timestamp.from(Instant.now()).toLocalDateTime())
-                .build();
-        return post(hit);
+                .build();*/
+        return post(request);
     }
 
     public ResponseEntity<Object> getHit(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
