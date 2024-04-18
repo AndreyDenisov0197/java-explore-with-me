@@ -16,6 +16,7 @@ import ru.practicum.ewm.HitDto;
 import ru.practicum.ewm.StatsClient;
 import ru.practicum.ewm.StatsDto;
 import ru.practicum.ewm.dto.*;
+import ru.practicum.ewm.dto.comment.CountCommentsByEventDto;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.dto.request.ParticipationRequestDto;
 import ru.practicum.ewm.exception.ConflictException;
@@ -29,11 +30,7 @@ import ru.practicum.ewm.model.enums.EventAdminState;
 import ru.practicum.ewm.model.enums.EventStatus;
 import ru.practicum.ewm.model.enums.EventUserState;
 import ru.practicum.ewm.model.enums.RequestStatus;
-import ru.practicum.ewm.repository.CategoryRepository;
-import ru.practicum.ewm.repository.EventRepository;
-import ru.practicum.ewm.repository.LocationRepository;
-import ru.practicum.ewm.repository.RequestRepository;
-import ru.practicum.ewm.repository.UserRepository;
+import ru.practicum.ewm.repository.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -52,6 +49,7 @@ public class EventServiceImpl implements EventService {
     private final RequestRepository requestRepository;
     private final LocationRepository locationRepository;
     private final ObjectMapper objectMapper;
+    private final CommentRepository commentRepository;
 
 
     @Value("${server.application.name:ewm-service}")
@@ -353,9 +351,17 @@ public class EventServiceImpl implements EventService {
                 .stream().map(EventMapper::toEventShortDto).collect(Collectors.toList());
         Map<Long, Long> viewStatsMap = getViewsAllEvents(resultEvents);
 
+        List<CountCommentsByEventDto> commentsCountMap = commentRepository.countCommentByEvent(
+                resultEvents.stream().map(Event::getId).collect(Collectors.toList()));
+        Map<Long, Long> commentsCountToEventIdMap = commentsCountMap.stream().collect(Collectors.toMap(
+                CountCommentsByEventDto::getEventId, CountCommentsByEventDto::getCountComments));
+
         for (EventShortDto event : result) {
             Long viewsFromMap = viewStatsMap.getOrDefault(event.getId(), 0L);
             event.setViews(viewsFromMap);
+
+            Long commentCountFromMap = commentsCountToEventIdMap.getOrDefault(event.getId(), 0L);
+            event.setComments(commentCountFromMap);
         }
 
         return result;
