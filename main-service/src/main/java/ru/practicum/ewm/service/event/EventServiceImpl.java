@@ -1,4 +1,5 @@
 package ru.practicum.ewm.service.event;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.HitDto;
 import ru.practicum.ewm.StatsClient;
 import ru.practicum.ewm.StatsDto;
-import ru.practicum.ewm.dto.*;
+import ru.practicum.ewm.dto.CaseUpdatedStatusDto;
 import ru.practicum.ewm.dto.comment.CountCommentsByEventDto;
 import ru.practicum.ewm.dto.event.*;
 import ru.practicum.ewm.dto.request.ParticipationRequestDto;
@@ -45,11 +46,11 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final CommentRepository commentRepository;
     private final StatsClient statsClient;
     private final RequestRepository requestRepository;
     private final LocationRepository locationRepository;
     private final ObjectMapper objectMapper;
-    private final CommentRepository commentRepository;
 
 
     @Value("${server.application.name:ewm-service}")
@@ -429,7 +430,7 @@ public class EventServiceImpl implements EventService {
         Map<Long, Long> viewStatsMap = new HashMap<>();
 
         if (earliestDate != null) {
-            ResponseEntity<Object> response = statsClient.getHit(earliestDate, LocalDateTime.now(),
+            ResponseEntity<Object> response = statsClient.getStats(earliestDate, LocalDateTime.now(),
                     uris, true);
 
             List<StatsDto> viewStatsList = objectMapper.convertValue(response.getBody(), new TypeReference<>() {
@@ -488,7 +489,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private void addStatsClient(HttpServletRequest request) {
-        statsClient.saveHit(HitDto.builder()
+        statsClient.postStats(HitDto.builder()
                 .app(applicationName)
                 .uri(request.getRequestURI())
                 .ip(request.getRemoteAddr())

@@ -1,6 +1,5 @@
 package ru.practicum.ewm.exception;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Getter;

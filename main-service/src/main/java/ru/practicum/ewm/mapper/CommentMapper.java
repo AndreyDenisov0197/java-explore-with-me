@@ -9,7 +9,6 @@ import ru.practicum.ewm.model.User;
 
 import java.time.LocalDateTime;
 
-
 @UtilityClass
 public class CommentMapper {
     public CommentDto toCommentDto(Comment comment) {
