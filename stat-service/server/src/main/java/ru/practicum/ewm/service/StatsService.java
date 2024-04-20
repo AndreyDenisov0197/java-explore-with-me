@@ -1,14 +1,13 @@
 package ru.practicum.ewm.service;
 
-import ru.practicum.ewm.HitDto;
-import ru.practicum.ewm.StatsDto;
-import ru.practicum.ewm.StatsRequestDto;
+import ru.practicum.ewm.EndpointHit;
+import ru.practicum.ewm.ViewStats;
+import ru.practicum.ewm.ViewsStatsRequest;
 
 import java.util.List;
 
 public interface StatsService {
+    void saveHit(EndpointHit hit);
 
-    void saveHit(HitDto hit);
-
-    List<StatsDto> getStatsList(StatsRequestDto build);
+    List<ViewStats> getViewStatsList(ViewsStatsRequest request);
 }

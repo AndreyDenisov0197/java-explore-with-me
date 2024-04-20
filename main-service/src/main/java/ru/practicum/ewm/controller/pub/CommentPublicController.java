@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.model.Comment;
-import ru.practicum.ewm.service.comment.CommentService;
+import ru.practicum.ewm.service.CommentService;
 
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;

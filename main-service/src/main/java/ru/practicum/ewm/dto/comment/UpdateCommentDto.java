@@ -1,5 +1,6 @@
 package ru.practicum.ewm.dto.comment;
 
+
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;

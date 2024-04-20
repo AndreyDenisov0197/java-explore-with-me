@@ -1,5 +1,6 @@
 package ru.practicum.ewm.model;
 
+
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

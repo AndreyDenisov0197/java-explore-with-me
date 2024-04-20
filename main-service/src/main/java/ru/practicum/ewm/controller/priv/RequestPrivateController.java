@@ -6,37 +6,38 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.request.ParticipationRequestDto;
-import ru.practicum.ewm.service.request.RequestService;
+import ru.practicum.ewm.service.RequestService;
 
 import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/users/{userId}/requests")
 @Slf4j
 @RequiredArgsConstructor
 @Validated
+@RequestMapping(path = "users/{userId}/requests")
 public class RequestPrivateController {
     private final RequestService requestService;
 
-    @GetMapping
-    public List<ParticipationRequestDto> getAllRequests(@PathVariable(value = "userId") @Min(1) Long userId) {
-        log.info("GET запрос на получение всех запросов на участие в в событиях пользователя с id={}", userId);
-        return requestService.getRequestsByUserId(userId);
-    }
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ParticipationRequestDto addRequest(@PathVariable(value = "userId") @Min(1) Long userId,
-                                              @RequestParam(value = "eventId") @Min(1) Long eventId) {
-        log.info("POST запрос на создание запроса участия в событии id={} пользователя id={}", eventId, userId);
+    public ParticipationRequestDto addRequest(@PathVariable(value = "userId") @Min(0) Long userId,
+                                              @RequestParam(name = "eventId") @Min(0) Long eventId) {
+        log.info("POST запрос на создание запроса на участие в событии с id= {}  пользователя с id= {}",
+                eventId, userId);
         return requestService.addNewRequest(userId, eventId);
     }
 
+    @GetMapping
+    public List<ParticipationRequestDto> getAllRequests(@PathVariable(value = "userId") @Min(0) Long userId) {
+        log.info("GET запрос на получение всех запросов на участие в событиях пользователя с id= {}", userId);
+        return requestService.getRequestsByUserId(userId);
+    }
+
     @PatchMapping("/{requestId}/cancel")
-    public ParticipationRequestDto cancelRequest(@PathVariable(value = "userId") @Min(1) Long userId,
-                                                 @PathVariable(value = "requestId") @Min(1) Long requestId) {
-        log.info("PATCH запрос на отмену запроса id={} пользователя id={}", requestId, userId);
+    public ParticipationRequestDto canceledRequest(@PathVariable(value = "userId") @Min(0) Long userId,
+                                                   @PathVariable(value = "requestId") @Min(0) Long requestId) {
+        log.info("PATCH запрос на отмену запроса пользователем с id= {}", userId);
         return requestService.cancelRequest(userId, requestId);
     }
 }

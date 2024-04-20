@@ -27,8 +27,8 @@ public class StatsClient extends BaseClient {
         );
     }
 
-    public void postStats(HitDto hitDto) {
-        post(hitDto);
+    public void postStats(EndpointHit endpointHitDto) {
+        post(endpointHitDto);
     }
 
     public ResponseEntity<Object> getStats(LocalDateTime start, LocalDateTime end, List<String> uris,
