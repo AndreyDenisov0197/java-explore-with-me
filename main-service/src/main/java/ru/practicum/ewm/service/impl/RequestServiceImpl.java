@@ -2,6 +2,7 @@ package ru.practicum.ewm.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.request.ParticipationRequestDto;
 import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.exception.NotFoundException;
@@ -11,7 +12,7 @@ import ru.practicum.ewm.model.Request;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.model.enums.EventStatus;
 import ru.practicum.ewm.model.enums.RequestStatus;
-import ru.practicum.ewm.model.mappers.RequestMapper;
+import ru.practicum.ewm.mappers.RequestMapper;
 import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.repository.RequestRepository;
 import ru.practicum.ewm.repository.UserRepository;
@@ -23,12 +24,14 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
 
     @Override
+    @Transactional
     public ParticipationRequestDto addNewRequest(Long userId, Long eventId) {
         User user = checkUser(userId);
 
@@ -57,6 +60,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public List<ParticipationRequestDto> getRequestsByUserId(Long userId) {
         checkUser(userId);
         List<Request> result = requestRepository.findAllByRequesterId(userId);
@@ -64,6 +68,7 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
+    @Transactional
     public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
         checkUser(userId);
         Request request = requestRepository.findByIdAndRequesterId(requestId, userId).orElseThrow(

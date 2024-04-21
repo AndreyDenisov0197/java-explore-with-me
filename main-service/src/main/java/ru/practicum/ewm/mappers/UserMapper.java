@@ -1,4 +1,4 @@
-package ru.practicum.ewm.model.mappers;
+package ru.practicum.ewm.mappers;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.ewm.dto.request.NewUserRequest;

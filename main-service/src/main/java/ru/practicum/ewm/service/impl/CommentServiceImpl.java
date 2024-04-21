@@ -14,7 +14,7 @@ import ru.practicum.ewm.model.Comment;
 import ru.practicum.ewm.model.Event;
 import ru.practicum.ewm.model.User;
 import ru.practicum.ewm.model.enums.EventStatus;
-import ru.practicum.ewm.model.mappers.CommentMapper;
+import ru.practicum.ewm.mappers.CommentMapper;
 import ru.practicum.ewm.repository.CommentRepository;
 import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.repository.UserRepository;
@@ -77,6 +77,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void deleteComment(Long userId, Long commentId) {
         User user = checkUser(userId);
         Comment comment = checkComment(commentId);
@@ -85,8 +86,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void deleteCommentByAdmin(Long commentId) {
-        Comment comment = checkComment(commentId);
+        checkComment(commentId);
         commentRepository.deleteById(commentId);
     }
 

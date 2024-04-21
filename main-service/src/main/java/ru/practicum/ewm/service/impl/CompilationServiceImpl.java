@@ -11,7 +11,7 @@ import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.exception.UncorrectedParametersException;
 import ru.practicum.ewm.model.Compilation;
 import ru.practicum.ewm.model.Event;
-import ru.practicum.ewm.model.mappers.CompilationMapper;
+import ru.practicum.ewm.mappers.CompilationMapper;
 import ru.practicum.ewm.repository.CompilationRepository;
 import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.service.CompilationService;
@@ -72,6 +72,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
+    @Transactional
     public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
 
         PageRequest pageRequest = PageRequest.of(from, size);
@@ -89,6 +90,7 @@ public class CompilationServiceImpl implements CompilationService {
 
 
     @Override
+    @Transactional
     public CompilationDto findByIdCompilation(Long compId) {
         return CompilationMapper.toDto(checkCompilation(compId));
     }

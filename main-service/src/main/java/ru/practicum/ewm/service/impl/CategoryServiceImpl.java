@@ -3,13 +3,14 @@ package ru.practicum.ewm.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.ewm.dto.category.CategoryDto;
 import ru.practicum.ewm.dto.category.NewCategoryDto;
 import ru.practicum.ewm.exception.ConflictException;
 import ru.practicum.ewm.exception.NotFoundException;
 import ru.practicum.ewm.model.Category;
 import ru.practicum.ewm.model.Event;
-import ru.practicum.ewm.model.mappers.CategoryMapper;
+import ru.practicum.ewm.mappers.CategoryMapper;
 import ru.practicum.ewm.repository.CategoryRepository;
 import ru.practicum.ewm.repository.EventRepository;
 import ru.practicum.ewm.service.CategoryService;
@@ -19,11 +20,13 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final EventRepository eventsRepository;
 
     @Override
+    @Transactional
     public List<CategoryDto> getCategories(Integer from, Integer size) {
         PageRequest pageRequest = PageRequest.of(from / size, size);
         return categoryRepository.findAll(pageRequest)
@@ -31,12 +34,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto getCategoryById(Long catId) {
         Category category = checkCategory(catId);
         return CategoryMapper.toCategoryDto(category);
     }
 
     @Override
+    @Transactional
     public CategoryDto addNewCategory(NewCategoryDto newCategoryDto) {
         Category category = CategoryMapper.toNewCategoryDto(newCategoryDto);
         Category saveCategory = categoryRepository.save(category);
@@ -44,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategoryById(Long catId) {
         Category category = checkCategory(catId);
         List<Event> events = eventsRepository.findByCategory(category);
@@ -54,6 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto updateCategory(Long catId, CategoryDto categoryDto) {
         Category oldCategory = checkCategory(catId);
         String newName = categoryDto.getName();
