@@ -6,9 +6,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.ewm.HitDto;
-import ru.practicum.ewm.StatsDto;
-import ru.practicum.ewm.StatsRequestDto;
+import ru.practicum.ewm.EndpointHit;
+import ru.practicum.ewm.ViewStats;
+import ru.practicum.ewm.ViewsStatsRequest;
 import ru.practicum.ewm.service.StatsService;
 
 import java.security.InvalidParameterException;
@@ -24,28 +24,28 @@ public class StatsController {
 
     @PostMapping("/hit")
     @ResponseStatus(code = HttpStatus.CREATED)
-    public void hit(@RequestBody HitDto hit) {
-        log.info("Post запрос на сохранение информации");
+    public void hit(@RequestBody EndpointHit hit) {
+        log.info("POST request to save information.");
         service.saveHit(hit);
     }
 
     @GetMapping("/stats")
-    public List<StatsDto> getStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")LocalDateTime start,
-                                   @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")LocalDateTime end,
-                                   @RequestParam(defaultValue = "") List<String> uris,
-                                   @RequestParam(defaultValue = "false") boolean unique) {
-        log.info("Get запрос на получение статистики");
+    public List<ViewStats> getStats(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
+                                    @RequestParam(defaultValue = "") List<String> uris,
+                                    @RequestParam(defaultValue = "false") boolean unique) {
+        log.info("GET request to get all statistic.");
         if (end.isBefore(start)) {
-            log.warn("Неверно указаны даты: start {} позже end {}", start, end);
-            throw new InvalidParameterException("Неверно указаны даты: start " + start + " позже end " + end);
+            log.info("Uncorrected format of dates start {} и end {}", start, end);
+            throw new InvalidParameterException("Uncorrected format of dates");
         }
-
-        return service.getStatsList(
-                StatsRequestDto.builder()
+        return service.getViewStatsList(
+                ViewsStatsRequest.builder()
                         .start(start)
                         .end(end)
                         .uris(uris)
                         .unique(unique)
-                        .build());
+                        .build()
+        );
     }
 }

@@ -3,10 +3,10 @@ package ru.practicum.ewm.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import ru.practicum.ewm.HitDto;
-import ru.practicum.ewm.StatsDto;
-import ru.practicum.ewm.StatsRequestDto;
-import ru.practicum.ewm.mapper.StatsMapper;
+import ru.practicum.ewm.EndpointHit;
+import ru.practicum.ewm.ViewStats;
+import ru.practicum.ewm.ViewsStatsRequest;
+import ru.practicum.ewm.mapper.ViewStatsMapper;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -15,32 +15,32 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StatsRepositoryImpl implements StatsRepository {
     private final JdbcTemplate jdbcTemplate;
-    private final StatsMapper mapper;
+    private final ViewStatsMapper viewStatsMapper;
 
     @Override
-    public void saveHit(HitDto hit) {
-        jdbcTemplate.update("INSERT INTO stats (app, uri, ip, timestamp) VALUES (?, ?, ?, ?)",
+    public void saveHit(EndpointHit hit) {
+        jdbcTemplate.update("INSERT INTO stats (app, uri, ip, created) VALUES (?, ?, ?, ?)",
                 hit.getApp(), hit.getUri(), hit.getIp(), Timestamp.valueOf(hit.getTimestamp()));
     }
 
     @Override
-    public List<StatsDto> getStats(StatsRequestDto request) {
-        String query = "SELECT app, uri, COUNT (ip) AS hits FROM stats WHERE (timestamp >= ? AND timestamp <= ?) ";
+    public List<ViewStats> getStats(ViewsStatsRequest request) {
+        String query = "SELECT app, uri, COUNT (ip) AS hits FROM stats WHERE (created >= ? AND created <= ?) ";
         if (!request.getUris().isEmpty()) {
             query += createUrisQuery(request.getUris());
         }
         query += " GROUP BY app, uri ORDER BY hits DESC";
-        return jdbcTemplate.query(query, mapper, request.getStart(), request.getEnd());
+        return jdbcTemplate.query(query, viewStatsMapper, request.getStart(), request.getEnd());
     }
 
     @Override
-    public List<StatsDto> getUniqueStats(StatsRequestDto request) {
-        String query = "SELECT app, uri, COUNT (DISTINCT ip) AS hits FROM stats WHERE (timestamp >= ? AND timestamp <= ?) ";
+    public List<ViewStats> getUniqueStats(ViewsStatsRequest request) {
+        String query = "SELECT app, uri, COUNT (DISTINCT ip) AS hits FROM stats WHERE (created >= ? AND created <= ?) ";
         if (!request.getUris().isEmpty()) {
             query += createUrisQuery(request.getUris());
         }
         query += " GROUP BY app, uri ORDER BY hits DESC";
-        return jdbcTemplate.query(query, mapper, request.getStart(), request.getEnd());
+        return jdbcTemplate.query(query, viewStatsMapper, request.getStart(), request.getEnd());
     }
 
 

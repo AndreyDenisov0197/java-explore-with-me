@@ -6,8 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.ewm.dto.event.EventFullDto;
 import ru.practicum.ewm.dto.event.SearchEventParamsAdmin;
-import ru.practicum.ewm.dto.event.UpdateEventAdminRequest;
-import ru.practicum.ewm.service.event.EventService;
+import ru.practicum.ewm.dto.request.UpdateEventAdminRequest;
+import ru.practicum.ewm.service.EventService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
